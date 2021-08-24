@@ -1,0 +1,41 @@
+<html>
+<head></head>
+<body>
+
+decimal to evaluate: <input type="text" id="targetDecimal"><br>
+precision: &#177; 1/<input type="text" id="precision" value="250"/>
+<div id="finalResult"></div>
+<button onclick="process()">process!</button>
+<script type="text/javascript">
+	var bestError;
+	function process() {
+		var targetVal=document.getElementById("targetDecimal").value;
+		var precision=document.getElementById("precision").value;
+		bestError=targetVal;
+		approachFraction(targetVal, targetVal/precision, 1, 1);
+	}
+	function approachFraction(target, tolerance, numerator, denominator) {
+		if(Math.abs((numerator/denominator)-target)<tolerance){
+			console.log("settled on result "+numerator+"/"+denominator);
+			document.getElementById("finalResult").innerHTML="settled on result "+numerator+"/"+denominator+"&nbsp;&nbsp;&nbsp;&#177;"+(target-(numerator/denominator));
+			console.log("error of "+(target-(numerator/denominator)));
+			return;
+		}
+		if ((numerator/denominator)-target>0){
+			if (Math.abs((numerator/denominator)-target)<bestError){
+				bestError=Math.abs((numerator/denominator)-target);
+				console.log(numerator+"/"+denominator+" insufficient, error of "+(target-(numerator/denominator))+", recursing");
+			}
+			approachFraction(target, tolerance, numerator, denominator+1)
+		}else{
+			if (Math.abs((numerator/denominator)-target)<bestError){
+				bestError=Math.abs((numerator/denominator)-target);
+				console.log(numerator+"/"+denominator+" insufficient, error of "+(target-(numerator/denominator))+", recursing");
+			}
+			approachFraction(target, tolerance, numerator+1, denominator)
+		}
+	}
+	
+</script>
+</body>
+</html>
